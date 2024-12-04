@@ -7,6 +7,16 @@ from rest_framework.authtoken.models import Token
 from .serializers import RegisterSerializer, UserSerializer
 import random
 import string
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
+from .models import AccountDetails, PaymentMethod, OrderHistory, Settings, Address
+from .serializers import (
+    AccountDetailsSerializer,
+    PaymentMethodSerializer,
+    OrderHistorySerializer,
+    SettingsSerializer,
+    AddressSerializer,
+)
 
 User = get_user_model()
 
@@ -49,3 +59,42 @@ def forgot_password(request):
         return Response({"message": "Temporary password sent to your email."}, status=status.HTTP_200_OK)
     return Response({"error": "Email not found"}, status=status.HTTP_404_NOT_FOUND)
 
+class AccountDetailsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        account = AccountDetails.objects.get(user=request.user)
+        serializer = AccountDetailsSerializer(account)
+        return Response(serializer.data)
+
+class PaymentMethodsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        payments = PaymentMethod.objects.filter(user=request.user)
+        serializer = PaymentMethodSerializer(payments, many=True)
+        return Response(serializer.data)
+
+class OrderHistoryView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        orders = OrderHistory.objects.filter(user=request.user)
+        serializer = OrderHistorySerializer(orders, many=True)
+        return Response(serializer.data)
+
+class SettingsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        settings = Settings.objects.get(user=request.user)
+        serializer = SettingsSerializer(settings)
+        return Response(serializer.data)
+
+class AddressView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        addresses = Address.objects.filter(user=request.user)
+        serializer = AddressSerializer(addresses, many=True)
+        return Response(serializer.data)

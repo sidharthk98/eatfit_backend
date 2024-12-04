@@ -1,0 +1,153 @@
+[
+	{
+		"model": "auth.user",
+		"pk": 1,
+		"fields": {
+			"username": "user1",
+			"password": "pbkdf2_sha256$260000$examplehash",
+			"email": "user1@example.com",
+			"is_staff": false,
+			"is_active": true
+		}
+	},
+	{
+		"model": "auth.user",
+		"pk": 2,
+		"fields": {
+			"username": "user2",
+			"password": "pbkdf2_sha256$260000$examplehash",
+			"email": "user2@example.com",
+			"is_staff": false,
+			"is_active": true
+		}
+	},
+	{
+		"model": "auth.user",
+		"pk": 3,
+		"fields": {
+			"username": "user3",
+			"password": "pbkdf2_sha256$260000$examplehash",
+			"email": "user3@example.com",
+			"is_staff": false,
+			"is_active": true
+		}
+	},
+	{
+		"model": "auth.user",
+		"pk": 4,
+		"fields": {
+			"username": "user4",
+			"password": "pbkdf2_sha256$260000$examplehash",
+			"email": "user4@example.com",
+			"is_staff": false,
+			"is_active": true
+		}
+	},
+	{
+		"model": "auth.user",
+		"pk": 5,
+		"fields": {
+			"username": "user5",
+			"password": "pbkdf2_sha256$260000$examplehash",
+			"email": "user5@example.com",
+			"is_staff": false,
+			"is_active": true
+		}
+	},
+	{
+		"model": "user_accounts.accountdetails",
+		"pk": 1,
+		"fields": {
+			"user": 1,
+			"name": "User One",
+			"email": "user1@example.com"
+		}
+	},
+	{
+		"model": "user_accounts.paymentmethod",
+		"pk": 1,
+		"fields": {
+			"user": 1,
+			"card_number": "1234567812345678",
+			"expiry_date": "2025-12-31"
+		}
+	},
+	{
+		"model": "user_accounts.orderhistory",
+		"pk": 1,
+		"fields": {
+			"user": 1,
+			"order_id": "ORD0001",
+			"date": "2024-01-01",
+			"total": "100.50"
+		}
+	},
+	{
+		"model": "user_accounts.settings",
+		"pk": 1,
+		"fields": {
+			"user": 1,
+			"notifications": true,
+			"dark_mode": false
+		}
+	},
+	{
+		"model": "user_accounts.address",
+		"pk": 1,
+		"fields": {
+			"user": 1,
+			"street": "123 Main St",
+			"city": "Springfield",
+			"postal_code": "12345",
+			"country": "USA"
+		}
+	},
+	{
+		"model": "user_accounts.accountdetails",
+		"pk": 2,
+		"fields": {
+			"user": 2,
+			"name": "User Two",
+			"email": "user2@example.com"
+		}
+	},
+	{
+		"model": "user_accounts.paymentmethod",
+		"pk": 2,
+		"fields": {
+			"user": 2,
+			"card_number": "8765432187654321",
+			"expiry_date": "2026-06-30"
+		}
+	},
+	{
+		"model": "user_accounts.orderhistory",
+		"pk": 2,
+		"fields": {
+			"user": 2,
+			"order_id": "ORD0002",
+			"date": "2024-01-02",
+			"total": "200.75"
+		}
+	},
+	{
+		"model": "user_accounts.settings",
+		"pk": 2,
+		"fields": {
+			"user": 2,
+			"notifications": false,
+			"dark_mode": true
+		}
+	},
+	{
+		"model": "user_accounts.address",
+		"pk": 2,
+		"fields": {
+			"user": 2,
+			"street": "456 Elm St",
+			"city": "Shelbyville",
+			"postal_code": "67890",
+			"country": "Canada"
+		}
+	}
+]
