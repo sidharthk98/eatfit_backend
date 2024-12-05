@@ -12,6 +12,7 @@ urlpatterns = [
     path('signup/', signup, name='signup'),
     path('login/', login, name='login'),
     path('forgot-password/', forgot_password, name='forgot_password'),
+    path('account-details/', AccountDetailsView.as_view(), name='account-details'),
     path("account-details/", AccountDetailsView.as_view(), name="account_details"),
     path("payment-methods/", PaymentMethodsView.as_view(), name="payment_methods"),
     path("order-history/", OrderHistoryView.as_view(), name="order_history"),

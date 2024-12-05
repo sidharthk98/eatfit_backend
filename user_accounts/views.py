@@ -4,6 +4,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.authtoken.models import Token
+from rest_framework_simplejwt.tokens import RefreshToken
 from .serializers import RegisterSerializer, UserSerializer
 import random
 import string
@@ -20,6 +21,17 @@ from .serializers import (
 
 User = get_user_model()
 
+
+class AccountDetailsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        return Response({
+            "name": user.username,
+            "email": user.email,
+        })
+    
 @api_view(['POST'])
 def signup(request):
     serializer = RegisterSerializer(data=request.data)
@@ -32,10 +44,25 @@ def signup(request):
 def login(request):
     username = request.data.get('username')
     password = request.data.get('password')
+    
+    # Debug: Check if we are getting the username and password correctly
+    print(f"Username: {username}, Password: {password}")
+    
     user = authenticate(request, username=username, password=password)
+    
+    # Debug: Check the user object
+    print(f"Authenticated User: {user}")
+    
     if user is not None:
         token, _ = Token.objects.get_or_create(user=user)
-        return Response({"token": token.key}, status=status.HTTP_200_OK)
+        refresh = RefreshToken.for_user(user)
+        return Response({
+            'access': str(refresh.access_token),
+            'refresh': str(refresh),
+            'user': username,
+        }, status=status.HTTP_200_OK)
+        # return Response({"token": token.key, "user": username}, status=status.HTTP_200_OK)
+    
     return Response({"error": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
