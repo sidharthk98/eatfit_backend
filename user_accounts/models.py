@@ -3,6 +3,14 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
+
+PaymentMethods = {
+    "MC": "Mastercard",
+    "VI": "Visa",
+    "GW": "Google wallet",
+    "AP": "Apple Pay",
+}
+
 class AccountDetails(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="account_details")
     name = models.CharField(max_length=100)
@@ -68,6 +76,7 @@ class UserManager(BaseUserManager):
         return self.create_user(email, password, **extra_fields)
 
 class User(AbstractBaseUser):
+ 
     # Fields
     user_id = models.AutoField(primary_key=True)  # Auto incrementing user ID
     name = models.CharField(max_length=255)
@@ -77,10 +86,11 @@ class User(AbstractBaseUser):
     is_student = models.BooleanField(default=False)
     password = models.CharField(max_length=255)
     list_of_orders = models.JSONField(default=list)  # List of order IDs
-
+    is_student = models.BooleanField(default=False)
     # Required for AbstractBaseUser
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
+    payment_method = models.CharField(max_length=3, choices=PaymentMethods)
     
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name', 'phone_number']
@@ -98,13 +108,17 @@ class User(AbstractBaseUser):
     def logout(self):
         pass  # Placeholder for logout logic
     
-    def update_profile(self, name=None, phone_number=None, billing_address=None):
+    def update_profile(self, name=None, payment_method=Noen, is_student=None, phone_number=None, billing_address=None):
         if name:
             self.name = name
+        if is_student:
+            self.isStudent = is_student
         if phone_number:
             self.phone_number = phone_number
         if billing_address:
             self.billing_address = billing_address
+        if billing_address:
+            self.payment_method = payment_method
         self.save()
 
     def update_password(self, new_password):
