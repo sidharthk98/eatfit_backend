@@ -10,10 +10,9 @@ import random
 import string
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
-from .models import AccountDetails, PaymentMethod, OrderHistory, Settings, Address
+from .models import AccountDetails, OrderHistory, Settings, Address
 from .serializers import (
     AccountDetailsSerializer,
-    PaymentMethodSerializer,
     OrderHistorySerializer,
     SettingsSerializer,
     AddressSerializer,
@@ -40,28 +39,46 @@ def signup(request):
         return Response({"message": "User registered successfully."}, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+@api_view(['GET'])
+def get_user_data(request):
+    # If the request passes the dummy token authentication, this code will run
+    # Normally, you'd access the user object (request.user) but here we don't use any user model
+    
+    # Sample data to return
+    data = {
+        "payment_methods": ["Card 1", "Card 2"],
+        "order_history": ["Order 1", "Order 2"],
+        "settings": {
+            "notifications": True,
+            "dark_mode": False
+        }
+    }
+    
+    return Response(data, status=status.HTTP_200_OK)
+
 @api_view(['POST'])
 def login(request):
+    print("testtttt")
     username = request.data.get('username')
     password = request.data.get('password')
+
+    # Authenticate the user
+    # user = authenticate(request, username=username, password=password)
     
-    # Debug: Check if we are getting the username and password correctly
-    print(f"Username: {username}, Password: {password}")
-    
-    user = authenticate(request, username=username, password=password)
-    
-    # Debug: Check the user object
-    print(f"Authenticated User: {user}")
+    users = User.objects.all() 
+    print("testtttt")
+    for user in users:
+        print("testttt")
+        print(f"Username: {user.username}, Password Hash: {user.password}------------------------------------")
     
     if user is not None:
+        # If authentication is successful, get or create a token
         token, _ = Token.objects.get_or_create(user=user)
-        refresh = RefreshToken.for_user(user)
-        return Response({
-            'access': str(refresh.access_token),
-            'refresh': str(refresh),
-            'user': username,
-        }, status=status.HTTP_200_OK)
-        # return Response({"token": token.key, "user": username}, status=status.HTTP_200_OK)
+        return Response(
+            {"token": token.key, "user": username},
+            status=status.HTTP_200_OK
+        )
     
     return Response({"error": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -92,14 +109,6 @@ class AccountDetailsView(APIView):
     def get(self, request):
         account = AccountDetails.objects.get(user=request.user)
         serializer = AccountDetailsSerializer(account)
-        return Response(serializer.data)
-
-class PaymentMethodsView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request):
-        payments = PaymentMethod.objects.filter(user=request.user)
-        serializer = PaymentMethodSerializer(payments, many=True)
         return Response(serializer.data)
 
 class OrderHistoryView(APIView):

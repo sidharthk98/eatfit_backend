@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from .models import AccountDetails, PaymentMethod, OrderHistory, Settings, Address
+from .models import AccountDetails, OrderHistory, Settings, Address
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -23,11 +23,6 @@ class RegisterSerializer(serializers.ModelSerializer):
 class AccountDetailsSerializer(serializers.ModelSerializer):
     class Meta:
         model = AccountDetails
-        fields = "__all__"
-
-class PaymentMethodSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = PaymentMethod
         fields = "__all__"
 
 class OrderHistorySerializer(serializers.ModelSerializer):

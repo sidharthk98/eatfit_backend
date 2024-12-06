@@ -40,8 +40,10 @@ REST_FRAMEWORK = {
     ),
 }
 
+AUTH_USER_MODEL = 'user_accounts.User'
+
 AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',  # Default backend
+    'user_accounts.authentication.DummyTokenAuthentication',  # Default backend
 )
 
 INSTALLED_APPS = [
